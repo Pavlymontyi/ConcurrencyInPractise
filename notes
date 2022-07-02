@@ -1,0 +1,39 @@
+Конструктор ThreadPoolExecutor'а:
+public ThreadPoolExecutor(
+  int corePoolSize,
+  int maximumPoolSize,
+  long keepAliveTime,
+  TimeUnit unit,
+  BlockingQueue<Runnable> workQueue,
+  RejectedExecutionHandler handler
+)
+corePoolSize - первоначальное количество потоков
+maximumPoolSize - максимальное количество потоков
+keepAliveTime, unit - время икспайра потоков
+workQueue - очередь тасок
+handler (Saturation Policies) - обработчик ситуации сатурации, когда
+    - пул потоков достиг максимума,
+    - очередь задач заполнилась,
+    - все имеющиеся потоки заняты
+See: Abort-policy: https://www.baeldung.com/java-rejectedexecutionhandler#1-abort-policy
+
+
+
+Fixed vs Cached Thread pool: https://www.baeldung.com/java-executors-cached-fixed-threadpool
+
+Cached Thread Pool использует синхронную передачу тасок в потоки. Т.е. очереди задач нет, задача поступает и передается
+свободному потоку, если же свободного потока нет, то создается новый. Неиспользуемые потоки прибиваются, время 60 секунд.
+Количество создаваемых потоков ограничено только ресурсами системы, что приводит к бесконечному свитчингу между ними в
+случае большого количества долгих задач.
+Для несильно загруженных серверов или небольших программ можно использовать. Для продакшена настоящих загруженных
+систем не рекомендуется использовать.
+Работает за счет использования SynchronousQueue - блокирующая очередь, которая всегда пуста.
+Synchronous Handoff: Quite surprisingly, this queue can't hold any tasks! With this approach, we can queue a task if
+and only if there is another thread picking the same task on the other side at the same time.
+
+Fixed Thread Pool использует пул потоков фиксированного размера. Таски складываются в очередь, если на момент
+поступления задачи нет свободного потока. Если поток умер (например, из-за брошенного во вне Exception), то создается
+новый на его место. Треды не экспайрятся.
+Можно использовать для высоконагруженных продакшен серверов.
+
+
