@@ -10,7 +10,13 @@ public class ImageInfo {
     }
 
     public ImageData downloadImage() {
-        System.out.println("Downloading image by "+Thread.currentThread());
+        int delay = new Random().nextInt(100);
+        try {
+            Thread.sleep(delay);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Downloaded image "+ delay +" Bytes by "+Thread.currentThread());
         return new ImageData("Image downloaded from: "+imageLink);
     }
 }
