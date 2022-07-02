@@ -8,12 +8,13 @@ public class SingleThreadRenderer implements PageRenderer {
     @Override
     public void render(CharSequence source) {
         renderText(source);
-        List<ImageInfo> images = new ArrayList();
-        for (ImageInfo imageInfo :
-                scanForImageInfo(source)) {
-            images.add(imageInfo);
+        List<ImageInfo> imageData = new ArrayList();
+        for (ImageInfo imageInfo : scanForImageInfo(source)) {
+            imageData.add(imageInfo);
         }
-        renderImages(images);
+        for (ImageInfo data: imageData) {
+            renderImage(data);
+        }
     }
 
     private ImageInfo[] scanForImageInfo(CharSequence source) {
@@ -24,7 +25,7 @@ public class SingleThreadRenderer implements PageRenderer {
         System.out.println("rendering text");
     }
 
-    private
-
-
+    private void renderImage(ImageInfo data) {
+        System.out.println("rendering image: "+data);
+    }
 }
